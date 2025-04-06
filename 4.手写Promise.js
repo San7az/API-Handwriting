@@ -99,4 +99,46 @@ function MyPromise(fn) {
       onRejected(this.value)
     }
   }
+  function then(onFulfilled, onRejected) {
+    // 保存前一个 promise 的 this
+    const self = this
+    return new MyPromise((resolve, reject) => {
+      // 封装前一个 promise 成功时执行的函数
+      let fulfilled = () => {
+        try {
+          const result = onFulfilled(self.value) // 承前
+          return result instanceof MyPromise
+            ? result.then(resolve, reject)
+            : resolve(result) // 启后
+        } catch (err) {
+          reject(err)
+        }
+      }
+
+      // 封装前一个 promise 失败时执行的函数
+      let rejected = () => {
+        try {
+          const result = onRejected(self.value)
+          return result instanceof MyPromise
+            ? result.then(resolve, reject)
+            : reject(result)
+        } catch (err) {
+          reject(err)
+        }
+      }
+
+      switch (self.state) {
+        case PENDING:
+          self.resolvedCallbacks.push(fulfilled)
+          self.rejectedCallbacks.push(rejected)
+          break
+        case RESOLVED:
+          fulfilled()
+          break
+        case REJECTED:
+          rejected()
+          break
+      }
+    })
+  }
 }
