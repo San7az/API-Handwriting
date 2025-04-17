@@ -1,0 +1,32 @@
+<script>
+  function childNumber(num, count) {
+    let allPlayer = []
+    for (let i = 0; i < num; i++) {
+      allPlayer[i] = i + 1
+    }
+    let exitCount = 0, // 离开人数
+      counter = 0, // 记录报数
+      curIndex = 0 // 当前下标
+    while (exitCount < num - 1) {
+      if (allPlayer[curIndex] !== 0) {
+        counter++
+      }
+      if (counter === count) {
+        allPlayer[curIndex] = 0
+        exitCount++
+        counter = 0
+      }
+      curIndex++
+      if (curIndex === num) {
+        curIndex = 0
+      }
+    }
+    for (let i = 0; i < num; i++) {
+      if (allPlayer[i] !== 0) {
+        console.log(allPlayer[i])
+        return allPlayer[i]
+      }
+    }
+  }
+  childNumber(30, 3)
+</script>
