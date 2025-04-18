@@ -1,0 +1,53 @@
+<script>
+  function EventCenter() {
+    // 1.定义事件容器，用来装事件数组
+    let handlers = {}
+
+    // 2.添加事件，参数：事件名，事件处理函数
+    addEventListener(type, handler)
+    {
+      // 1.创建数组新容器
+      if (!this.handlers[type]) {
+        this.handlers[type] = []
+      }
+      // 存入时间
+      this.handlers[type].push(handler)
+    }
+
+    // 3.触发事件，参数:事件名 事件参数
+    dispatchEvent(type, params)
+    {
+      // 1.若没有注册该事件，报错
+      if (!handlers[type]) {
+        return new Error('该事件没有注册')
+      }
+      // 触发事件
+      this.handlers[type].forEach((handler) => {
+        handler(params)
+      })
+    }
+
+    // 4.移除事件，参数：事件名，要删除事件，若无第二个参数则删除该事件的发布订阅
+    removeEventListener(type, handler)
+    {
+      if (!handlers[type]) {
+        return new Error('该事件没有注册')
+      }
+      if (!handler) {
+        // 移出事件
+        delete this.handlers[type]
+      } else {
+        const index = this.handlers[type].findIndex((item) => {
+          item === handler
+        })
+        if (index === -1) {
+          return new Error('该事件没有注册')
+        }
+        this.handlers[type].splice(index, 1)
+        if (this.handlers[type].length === 0) {
+          delete this.handlers[type]
+        }
+      }
+    }
+  }
+</script>
