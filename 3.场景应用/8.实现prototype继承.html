@@ -1,0 +1,24 @@
+<script>
+  // 父方法
+  function SupperFunction(flag1) {
+    this.flag1 = flag1
+  }
+
+  // 子方法
+  function SubFunction(flag2) {
+    this.flag2 = flag2
+  }
+
+  // 父实例
+  var superInstance = new SupperFunction(true)
+
+  // 子继承父
+  SubFunction.prototype = superInstance
+
+  // 子实例
+  var subInstance = new SubFunction(false)
+
+  console.log(subInstance.flag1) // true
+
+  console.log(subInstance.flag2) // false
+</script>
